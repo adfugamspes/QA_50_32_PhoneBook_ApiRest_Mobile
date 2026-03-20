@@ -11,5 +11,8 @@ public interface BaseApi {
     String EDIT_CONTACT_URL = "/v1/contacts";
     String DELETE_CONTACT_URL = "/v1/contacts/";
     String BASE_URL_HTTP = "http://contactapp-telran-backend.herokuapp.com";
+
     Gson GSON = new Gson();
+
+    String AUTH = "Authorization";
 }

@@ -22,6 +22,5 @@ public class AppiumConfig {
         } catch (MalformedURLException e) {
             throw new RuntimeException("Bad Appium URL:" + getProperty(fileName, "appiumUrl"), e);
         }
-
     }
 }

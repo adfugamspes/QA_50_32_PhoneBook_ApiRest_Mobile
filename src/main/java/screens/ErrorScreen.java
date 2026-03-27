@@ -4,7 +4,7 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebElement;
 
-public class ErrorScreen extends BaseScreen{
+public class ErrorScreen extends BaseScreen {
 
     public ErrorScreen(AppiumDriver driver) {
         super(driver);
@@ -13,7 +13,21 @@ public class ErrorScreen extends BaseScreen{
     @AndroidFindBy(id = "android:id/message")
     WebElement textError;
 
-    public boolean validateTextInError(String text, int time){
+    @AndroidFindBy(id = "android:id/aerr_restart")
+    WebElement crashScreenBtn;
+
+    @AndroidFindBy(id = "android:id/title_template")
+    WebElement appStopped;
+
+    public boolean validateTextInError(String text, int time) {
         return isTextInElementPresent(textError, text, time);
+    }
+
+    public boolean validateCrashScreen(String text, int time) {
+        return isTextInElementPresent(crashScreenBtn, text, time);
+    }
+
+    public boolean isAppStoppedDisplayed(){
+        return isElementPresent(appStopped, 5);
     }
 }

@@ -10,6 +10,7 @@ import screens.ErrorScreen;
 import screens.LoginRegistrationScreen;
 import screens.SplashScreen;
 
+import static utils.PropertiesReader.getProperty;
 import static utils.UserFactory.*;
 public class RegistrationTests extends TestBase{
 
@@ -172,6 +173,34 @@ public class RegistrationTests extends TestBase{
     @Test
     public void registrationNegativeTest_UserAlreadyExists(){
         User user = positiveUserLogin();
+        loginRegistrationScreen.typeLoginRegistrationForm(user);
+        loginRegistrationScreen.clickBtnRegistration();
+        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("User already exists", 5));
+    }
+
+//=================================CW==================================//
+    @Test
+    public void registrationNegativeTest_EmptyEmailSpace(){
+        User user = positiveUser();
+        user.setUsername(" ");
+        loginRegistrationScreen.typeLoginRegistrationForm(user);
+        loginRegistrationScreen.clickBtnRegistration();
+        Assert.assertTrue(new ErrorScreen(driver).validateCrashScreen("Open app again", 5));
+    }
+
+    @Test
+    public void registrationNegativeTest_EmptyFields(){
+        User user = new User("", "");
+        loginRegistrationScreen.typeLoginRegistrationForm(user);
+        loginRegistrationScreen.clickBtnRegistration();
+        Assert.assertTrue(new ErrorScreen(driver).isAppStoppedDisplayed());
+    }
+
+    //==============================CW=============================//
+
+    @Test
+    public void registrationNegativeTest_UserAlreadyExists_CW(){
+        User user = new User(getProperty("base.properties", "login"), getProperty("base.properties", "password"));
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnRegistration();
         Assert.assertTrue(new ErrorScreen(driver).validateTextInError("User already exists", 5));

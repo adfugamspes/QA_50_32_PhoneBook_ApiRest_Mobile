@@ -18,6 +18,5 @@ public class PropertiesReader {
             e.printStackTrace();
             return null;
         }
-
     }
 }

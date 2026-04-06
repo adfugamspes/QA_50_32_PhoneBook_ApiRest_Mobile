@@ -1,5 +1,9 @@
 package dto;
 
+import lombok.*;
+
+@Builder
+
 public class User {
     private String username;
     private String password;

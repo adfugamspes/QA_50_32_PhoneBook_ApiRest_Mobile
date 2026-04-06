@@ -1,5 +1,6 @@
 package utils;
 
+import dto.Contact;
 import dto.User;
 import net.datafaker.Faker;
 
@@ -27,5 +28,12 @@ public class UserFactory {
 
     public static User positiveUserLogin(){
         return new User(getProperty("base.properties", "login"), getProperty("base.properties", "password"));
+    }
+
+    public static User positiveUserWithBuilder(){
+        return User.builder()
+                .username(faker.internet().emailAddress())
+                .password("Password!123")
+                .build();
     }
 }

@@ -1,5 +1,7 @@
 package mobile_tests;
 
+import data_providers.ContactDataProvider;
+import data_providers.UserDataProvider;
 import dto.User;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
@@ -31,6 +33,7 @@ public class RegistrationTests extends TestBase{
                 ("No Contacts. Add One more!", 10));
     }
 
+    // response 1
     @Test
     public void registrationNegativeTest_EmptyEmail(){
         User user = positiveUser();
@@ -40,169 +43,60 @@ public class RegistrationTests extends TestBase{
         Assert.assertTrue(new ErrorScreen(driver).validateTextInError("username=must not be blank", 5));
     }
 
-    // по хорошему здесь не должно быть валидации крашей, все краши - это баги
-    // по логике здесь нужна валидация сообщений типа "поле не должно быть пустым", как в логине
-
-    @Test
-    public void registrationNegativeTest_EmptyPassword(){
-        User user = positiveUser();
-        user.setPassword("");
+    // response 2
+    @Test(dataProvider = "dataProviderFromFile_UserRegistration", dataProviderClass = UserDataProvider.class)
+    public void registrationNegativeTest_EmptyOrSpaceFields(User user){
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnRegistration();
         Assert.assertNotNull(driver.getSessionId(), "validate app crush");
     }
 
-    @Test
-    public void registrationNegativeTest_EmptyEmailAndPassword(){
-        User user = positiveUser();
-        user.setUsername("");
-        user.setPassword("");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertNotNull(driver.getSessionId(), "validate app crush");
-    }
-
-    @Test
-    public void registrationNegativeTest_EmptyEmailOnlySpace(){
-        User user = positiveUser();
-        user.setUsername(" ");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertNotNull(driver.getSessionId(), "validate app crush");
-    }
-
-    @Test
-    public void registrationNegativeTest_EmptyPasswordOnlySpace(){
-        User user = positiveUser();
-        user.setPassword(" ");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertNotNull(driver.getSessionId(), "validate app crush");
-    }
-
-    @Test
-    public void registrationNegativeTest_EmailWOAtSymbol(){
-        User user = positiveUser();
-        user.setUsername("testexample123gmail.com");
+    // response 3
+    @Test(dataProvider = "dataProviderFromFile_UserRegistration2", dataProviderClass = UserDataProvider.class)
+    public void registrationNegativeTest_WrongEmail(User user){
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnRegistration();
         Assert.assertTrue(new ErrorScreen(driver).validateTextInError("username=must be a well-formed email address", 5));
     }
 
-    @Test
-    public void registrationNegativeTest_Email2AtSymbol(){
-        User user = positiveUser();
-        user.setUsername("testexample@@123gmail.com");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("username=must be a well-formed email address", 5));
-    }
-
-    @Test
-    public void registrationNegativeTest_EmailNoLettersAfterAtSign(){
-        User user = positiveUser();
-        user.setUsername("testexample@@");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("username=must be a well-formed email address", 5));
-    }
-
-    @Test
-    public void registrationNegativeTest_EmailNoLettersBeforeAtSign(){
-        User user = positiveUser();
-        user.setUsername("@123gmail.com");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("username=must be a well-formed email address", 5));
-    }
-
-    @Test
-    public void registrationNegativeTest_EmailOnlyCyrillicLetters_BUG(){
-        User user = positiveUser();
-        user.setUsername("тестоваяпочта1@гмейл.ком");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("username=must be a well-formed email address", 5));
-    }
-
-    @Test
-    public void registrationNegativeTest_PasswordNoUppercase(){
-        User user = positiveUser();
-        user.setPassword("password!123");
+    // response 4
+    @Test(dataProvider = "dataProviderFromFile_UserRegistration3", dataProviderClass = UserDataProvider.class)
+    public void registrationNegativeTest_WrongPassword(User user){
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnRegistration();
         Assert.assertTrue(new ErrorScreen(driver).validateTextInError("password= At least 8 characters;", 5));
     }
 
-    @Test
-    public void registrationNegativeTest_PasswordNoLowercase(){
-        User user = positiveUser();
-        user.setPassword("PASSWORD!123");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("password= At least 8 characters;", 5));
-    }
-
-    @Test
-    public void registrationNegativeTest_PasswordNoNumbers(){
-        User user = positiveUser();
-        user.setPassword("Password!test");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("password= At least 8 characters;", 5));
-    }
-
-    @Test
-    public void registrationNegativeTest_Password7Symbols(){
-        User user = positiveUser();
-        user.setPassword("Pas!123");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("password= At least 8 characters;", 5));
-    }
-
-    @Test
-    public void registrationNegativeTest_Password16Symbols_BUG(){
-        User user = positiveUser();
-        user.setPassword("Password!1234567");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("password= At least 8 characters;", 5));
-    }
-
+    // response 5
     @Test
     public void registrationNegativeTest_UserAlreadyExists(){
-        User user = positiveUserLogin();
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateTextInError("User already exists", 5));
-    }
-
-//=================================CW==================================//
-    @Test
-    public void registrationNegativeTest_EmptyEmailSpace(){
-        User user = positiveUser();
-        user.setUsername(" ");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).validateCrashScreen("Open app again", 5));
-    }
-
-    @Test
-    public void registrationNegativeTest_EmptyFields(){
-        User user = new User("", "");
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnRegistration();
-        Assert.assertTrue(new ErrorScreen(driver).isAppStoppedDisplayed());
-    }
-
-    //==============================CW=============================//
-
-    @Test
-    public void registrationNegativeTest_UserAlreadyExists_CW(){
         User user = new User(getProperty("base.properties", "login"), getProperty("base.properties", "password"));
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnRegistration();
         Assert.assertTrue(new ErrorScreen(driver).validateTextInError("User already exists", 5));
     }
+
+    //=================================CW==================================//
+
+    // эти тесты не будут работать, даже с flaky test, т.к. при запуске тестов подряд выдаются разные краши
+    // при первом краше выдается сообщение "Open app again"
+    // при втором краше - "Close app"
+    // при третьем - месседж закрывается очень быстро, сообщение не видно
+
+//    @Test
+//    public void registrationNegativeTest_EmptyEmailSpace(){
+//        User user = positiveUser();
+//        user.setUsername(" ");
+//        loginRegistrationScreen.typeLoginRegistrationForm(user);
+//        loginRegistrationScreen.clickBtnRegistration();
+//        Assert.assertTrue(new ErrorScreen(driver).validateCrashScreen("Open app again", 5));
+//    }
+//
+//    @Test
+//    public void registrationNegativeTest_EmptyFields(){
+//        User user = new User("", "");
+//        loginRegistrationScreen.typeLoginRegistrationForm(user);
+//        loginRegistrationScreen.clickBtnRegistration();
+//        Assert.assertTrue(new ErrorScreen(driver).isAppStoppedDisplayed());
+//    }
 }

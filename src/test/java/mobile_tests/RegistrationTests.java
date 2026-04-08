@@ -44,7 +44,7 @@ public class RegistrationTests extends TestBase{
     }
 
     // response 2
-    @Test(dataProvider = "dataProviderFromFile_UserRegistration", dataProviderClass = UserDataProvider.class)
+    @Test(dataProvider = "dataProviderFromFile_UserRegistration_EmptyFields", dataProviderClass = UserDataProvider.class)
     public void registrationNegativeTest_EmptyOrSpaceFields(User user){
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnRegistration();
@@ -52,7 +52,7 @@ public class RegistrationTests extends TestBase{
     }
 
     // response 3
-    @Test(dataProvider = "dataProviderFromFile_UserRegistration2", dataProviderClass = UserDataProvider.class)
+    @Test(dataProvider = "dataProviderFromFile_UserRegistration_WrongEmail", dataProviderClass = UserDataProvider.class)
     public void registrationNegativeTest_WrongEmail(User user){
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnRegistration();
@@ -60,7 +60,7 @@ public class RegistrationTests extends TestBase{
     }
 
     // response 4
-    @Test(dataProvider = "dataProviderFromFile_UserRegistration3", dataProviderClass = UserDataProvider.class)
+    @Test(dataProvider = "dataProviderFromFile_UserRegistration_WrongPassword", dataProviderClass = UserDataProvider.class)
     public void registrationNegativeTest_WrongPassword(User user){
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnRegistration();
@@ -78,7 +78,7 @@ public class RegistrationTests extends TestBase{
 
     //=================================CW==================================//
 
-    // эти тесты не будут работать, даже с flaky test, т.к. при запуске тестов подряд выдаются разные краши
+    // тесты, которые мы писали на уроке, не будут работать, даже с flaky test, т.к. при запуске тестов подряд выдаются разные краши
     // при первом краше выдается сообщение "Open app again"
     // при втором краше - "Close app"
     // при третьем - месседж закрывается очень быстро, сообщение не видно

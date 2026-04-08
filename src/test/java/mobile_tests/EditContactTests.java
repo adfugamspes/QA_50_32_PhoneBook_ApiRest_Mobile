@@ -5,6 +5,7 @@ import dto.User;
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
 import screens.AddNewContactScreen;
 import screens.ContactListScreen;
 import screens.EditContactScreen;
@@ -18,6 +19,7 @@ public class EditContactTests extends TestBase{
     LoginRegistrationScreen loginRegistrationScreen;
     ContactListScreen contactListScreen;
     EditContactScreen editContactScreen;
+    SoftAssert softAssert = new SoftAssert();
 
     @BeforeMethod
     public void login(){
@@ -35,6 +37,7 @@ public class EditContactTests extends TestBase{
         editContactScreen = new EditContactScreen(driver);
         editContactScreen.typeEditContactForm(contactUpdate);
         editContactScreen.clickBtnUpdateContact();
-        Assert.assertTrue(contactListScreen.validateTextInMessageContactWasUpdated("Contact was updated!", 5));
+        softAssert.assertTrue(contactListScreen.validateTextInMessageContactWasUpdated("Contact was updated!", 5));
+        softAssert.assertTrue(contactListScreen.isUpdatedContactPresentInList(contactUpdate));
     }
 }

@@ -1,5 +1,6 @@
 package screens;
 
+import dto.Contact;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.Dimension;
@@ -34,6 +35,12 @@ public class ContactListScreen extends BaseScreen{
 
     @AndroidFindBy(xpath = "(//android.widget.LinearLayout[@resource-id='com.sheygam.contactapp:id/rowContainer'])[1]")
     WebElement firstContact;
+
+    @AndroidFindBy(id="com.sheygam.contactapp:id/rowName")
+    WebElement contactName;
+
+    @AndroidFindBy(id="com.sheygam.contactapp:id/rowPhone")
+    WebElement contactPhone;
 
    public boolean validateTextInContactListScreenAfterRegistrationPresent(String text, int time){
         return isTextInElementPresent(noContacts, text, time);
@@ -71,5 +78,10 @@ public class ContactListScreen extends BaseScreen{
         swipe.addAction(finger.createPointerMove(Duration.ofMillis(600), PointerInput.Origin.viewport(), endX, centerY));
         swipe.addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
         driver.perform(Arrays.asList(swipe));
+    }
+
+    public boolean isUpdatedContactPresentInList(Contact contact){
+        return isTextInElementPresent(contactName, contact.getName()+ " " + contact.getLastName(), 5)
+                && isTextInElementPresent(contactPhone, contact.getPhone(), 5);
     }
 }

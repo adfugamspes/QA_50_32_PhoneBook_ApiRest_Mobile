@@ -2,6 +2,7 @@ package utils;
 
 import com.google.gson.Gson;
 
+
 public interface BaseApi {
     String BASE_URL = "https://contactapp-telran-backend.herokuapp.com";
     String REGISTRATION_URL = "/v1/user/registration/usernamepassword";
